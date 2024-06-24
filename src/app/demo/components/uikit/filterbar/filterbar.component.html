@@ -1,0 +1,75 @@
+<div class="card">
+  <h5>Filters</h5>
+  <button pButton pRipple type="button" label="Delete all filters" icon="pi pi-times" iconPos="right" class="p-button-danger p-button-text mr-2 mb-2" (click)="updateFilters()"></button>
+</div>
+<div class="card">
+  <h5>Price Range</h5>
+  <p-slider [(ngModel)]="sliderValues" [range]="true" [min]="filters.min_ad_price" [max]="filters.max_ad_price" (onChange)="updateFilters()"></p-slider>
+  <br>
+  <p>From {{ sliderValues[0] }} DT to {{ sliderValues[1] }} DT</p>
+</div>
+<div class="card">
+  <h5>Status</h5>
+  <div *ngFor="let statue of filters.ad_stocks">
+    <div class="field-checkbox">
+      <p-checkbox name="group1" [(ngModel)]="valCheckMarque" value="{{statue}}" id="{{statue}}" (onChange)="updateFilters()"></p-checkbox>
+      <label for="{{statue}}">{{statue}}</label>
+    </div>
+  </div>
+</div>
+<div class="card">
+  <h5>Offer</h5>
+  <div class="field-checkbox">
+    <p-checkbox name="group1" value="With Offer" [(ngModel)]="valCheckOffer" id="withOffer" (onChange)="updateFilters()"></p-checkbox>
+    <label for="withOffer">With Offer</label>
+  </div>
+  <div class="field-checkbox">
+    <p-checkbox name="group1" value="Without Offer" [(ngModel)]="valCheckOffer" id="withoutOffer" (onChange)="updateFilters()"></p-checkbox>
+    <label for="withoutOffer">Without Offer</label>
+  </div>
+</div>
+<div class="card">
+  <h5>Ram</h5>
+  <div *ngFor="let ram of filters.ram">
+    <div class="field-checkbox">
+      <p-checkbox name="group1" [(ngModel)]="valCheckRam" value="{{ram}}" id="{{ram}}" (onChange)="updateFilters()"></p-checkbox>
+      <label for="{{ram}}">{{ram}}</label>
+    </div>
+  </div>
+</div>
+<div class="card">
+  <h5>Stockage</h5>
+  <div *ngFor="let stockage of filters.stockage">
+    <div class="field-checkbox">
+      <p-checkbox name="group1" [(ngModel)]="valCheckStockage" value="{{stockage}}" id="{{stockage}}" (onChange)="updateFilters()"></p-checkbox>
+      <label for="{{stockage}}">{{stockage}}</label>
+    </div>
+  </div>
+</div>
+<div class="card">
+  <h5>Shop</h5>
+  <div *ngFor="let shop of filters.shop">
+    <div class="field-checkbox">
+      <p-checkbox name="group1" [(ngModel)]="valCheckShop" value="{{shop}}" id="{{shop}}" (onChange)="updateFilters()"></p-checkbox>
+      <label for="{{shop}}">{{shop}}</label>
+    </div>
+  </div>
+</div>
+<div class="card">
+  <h5>Brand</h5>
+  <div *ngFor="let marque of filters.marque">
+    <div class="field-checkbox">
+      <p-checkbox name="group1" [(ngModel)]="valCheckMarque" value="{{marque}}" id="{{marque}}" (onChange)="updateFilters()"></p-checkbox>
+      <label for="{{marque}}">{{marque}}</label>
+    </div>
+  </div>
+</div>
+<div class="card">
+  <h5>Color</h5>
+  <div *ngFor="let color of filters.couleur">
+    <div class="field-checkbox">
+      <p-checkbox name="group1" [(ngModel)]="valCheckColor" value="{{color}}" id="{{color}}" (onChange)="updateFilters()"></p-checkbox>
+      <label for="{{color}}">{{color}}</label>
+    </div>
+  </div>
+</div>
