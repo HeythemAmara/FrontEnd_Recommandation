@@ -5,7 +5,7 @@ import {Observable} from "rxjs";
 
 @Injectable()
 export class FilterService {
-  private apiUrl = 'http://127.0.0.1:8000/api/v1';
+  private apiUrl = 'https://backend-recommandation.onrender.com/api/v1';
 
   constructor(private http: HttpClient) { }
 

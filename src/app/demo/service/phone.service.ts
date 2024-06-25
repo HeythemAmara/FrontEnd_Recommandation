@@ -5,7 +5,7 @@ import {Observable} from "rxjs";
 
 @Injectable()
 export class PhoneService {
-  private apiUrl = 'http://127.0.0.1:8000/api/v1/read-csv';
+  private apiUrl = 'https://backend-recommandation.onrender.com/api/v1/read-csv';
 
   constructor(private http: HttpClient) { }
 

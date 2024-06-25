@@ -5,7 +5,7 @@ import {PriminiPhone} from "../api/priminiphone.model";
 
 @Injectable()
 export class PriminiPhoneService {
-  private apiUrl = 'http://127.0.0.1:8000/api/v1/read-primini';
+  private apiUrl = 'https://backend-recommandation.onrender.com/api/v1/read-primini';
 
   constructor(private http: HttpClient) { }
 
