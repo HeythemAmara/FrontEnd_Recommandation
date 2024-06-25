@@ -7,7 +7,7 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "deploy": "ng deploy"
+    "deploy": "ng deploy --base-href=/FrontEnd_Recommandation/ --repo=https://github.com/HeythemAmara/FrontEnd_Recommandation.git --nojekyll"
   },
   "private": true,
   "dependencies": {
