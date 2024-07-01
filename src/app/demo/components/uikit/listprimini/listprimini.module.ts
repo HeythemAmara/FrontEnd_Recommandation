@@ -18,28 +18,32 @@ import {OverlayPanelModule} from "primeng/overlaypanel";
 import {TableModule} from "primeng/table";
 import {CarouselModule} from "primeng/carousel";
 import {ImageModule} from "primeng/image";
+import {ProgressSpinnerModule} from "primeng/progressspinner";
+import {PanelModule} from "primeng/panel";
 
 @NgModule({
-    imports: [
-        CommonModule,
-        FormsModule,
-        ListPriminiRoutingModule,
-        DataViewModule,
-        PickListModule,
-        OrderListModule,
-        InputTextModule,
-        DropdownModule,
-        RatingModule,
-        ButtonModule,
-        SliderModule,
-        CheckboxModule,
-        RippleModule,
-        DialogModule,
-        OverlayPanelModule,
-        TableModule,
-        CarouselModule,
-        ImageModule
-    ],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ListPriminiRoutingModule,
+    DataViewModule,
+    PickListModule,
+    OrderListModule,
+    InputTextModule,
+    DropdownModule,
+    RatingModule,
+    ButtonModule,
+    SliderModule,
+    CheckboxModule,
+    RippleModule,
+    DialogModule,
+    OverlayPanelModule,
+    TableModule,
+    CarouselModule,
+    ImageModule,
+    ProgressSpinnerModule,
+    PanelModule
+  ],
     declarations: [
       ListPriminiComponent
     ]

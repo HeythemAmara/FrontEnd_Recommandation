@@ -4,13 +4,13 @@
 </div>
 <div class="card">
   <h5>Price Range</h5>
-  <p-slider [(ngModel)]="sliderValues" [range]="true" [min]="filters.min_ad_price" [max]="filters.max_ad_price" (onChange)="updateFilters()"></p-slider>
+  <p-slider [(ngModel)]="sliderValues" [range]="true" [min]="filters.min_price" [max]="filters.max_price" (onChange)="updateFilters()"></p-slider>
   <br>
   <p>From {{ sliderValues[0] }} DT to {{ sliderValues[1] }} DT</p>
 </div>
 <div class="card">
   <h5>Status</h5>
-  <div *ngFor="let statue of filters.ad_stocks">
+  <div *ngFor="let statue of filters.stocks">
     <div class="field-checkbox">
       <p-checkbox name="group1" [(ngModel)]="valCheckMarque" value="{{statue}}" id="{{statue}}" (onChange)="updateFilters()"></p-checkbox>
       <label for="{{statue}}">{{statue}}</label>

@@ -41,119 +41,213 @@
   <div class="col-12 lg:col-3" style="max-height: 1470px; overflow: auto; margin-bottom: 20px">
     <div class="card">
       <h5>Filters</h5>
-      <button pButton pRipple type="button" label="Delete all filters" icon="pi pi-times" iconPos="right" class="p-button-danger p-button-text mr-2 mb-2" (click)="updateFilters()"></button>
+      <button pButton pRipple type="button" label="Delete all filters" icon="pi pi-times" iconPos="right" class="p-button-danger p-button-text mr-2 mb-2" (click)="updateFilters('Delete')"></button>
     </div>
     <div class="card">
       <h5>Price Range</h5>
-      <p-slider [(ngModel)]="sliderValues" [range]="true" [min]="sliderMin" [max]="sliderMax" (onSlideEnd)="updateFilters()"></p-slider>
+      <p-slider [(ngModel)]="sliderValues" [range]="true" [min]="sliderMin" [max]="sliderMax" (onSlideEnd)="updateFilters('priceRange')"></p-slider>
       <br>
       <p>From {{ sliderValues[0] }} DT to {{ sliderValues[1] }} DT</p>
     </div>
 
-    <div class="card">
-      <h5>Status</h5>
-      <div *ngFor="let statue of filters.ad_stocks">
-        <div class="field-checkbox">
-          <p-checkbox name="group1" [(ngModel)]="valCheck" value="{{statue}}" id="{{statue}}" (onChange)="updateFilters()"></p-checkbox>
-          <label for="{{statue}}">{{statue}}</label>
-        </div>
-      </div>
+    <!-- Status Filter -->
+    <div style="margin-bottom: 30px">
+      <p-panel header="Status" [toggleable]="true" class="line-height-3 m-0">
+        <p-dataView #dvStatus [value]="displayedStatus" filterBy="name">
+          <ng-template pTemplate="header">
+            <div class="grid grid-nogutter flex-column md:flex-row justify-content-between">
+            <span class="p-input-icon-left mb-2 md:mb-0">
+              <i class="pi pi-search"></i>
+              <input type="search" pInputText placeholder="Search by Status" (input)="onFilter(dvStatus, $event, 'status')">
+            </span>
+            </div>
+          </ng-template>
+
+          <ng-template let-status pTemplate="listItem">
+            <div *ngFor="let statue of status">
+              <div class="field-checkbox">
+                <p-checkbox name="group1" [(ngModel)]="valCheck" [value]="statue.name" [id]="statue.name" (onChange)="updateFilters('status')"></p-checkbox>
+                <label [for]="statue.name" style="width: 140%;">{{statue.name}}</label>
+                <span style="width: 60%; text-align: end">{{statue.count}}</span>
+              </div>
+            </div>
+          </ng-template>
+        </p-dataView>
+      </p-panel>
     </div>
 
-    <div class="card">
-      <h5>Brand</h5>
-      <div *ngFor="let marque of filters.marque">
-        <div class="field-checkbox">
-          <p-checkbox name="group1" [(ngModel)]="valCheckMarque" value="{{marque}}" id="{{marque}}" (onChange)="updateFilters()"></p-checkbox>
-          <label for="{{marque}}">{{marque}}</label>
+    <!-- Brand Filter -->
+    <div style="margin-bottom: 30px">
+      <p-panel header="Brand" [toggleable]="true" class="line-height-3 m-0">
+        <p-dataView #dvBrand [value]="displayedBrands" filterBy="name">
+          <ng-template pTemplate="header">
+            <div class="grid grid-nogutter flex-column md:flex-row justify-content-between">
+          <span class="p-input-icon-left mb-2 md:mb-0">
+            <i class="pi pi-search"></i>
+            <input type="search" pInputText placeholder="Search by Brand" (input)="onFilter(dvBrand, $event, 'brand')">
+          </span>
+            </div>
+          </ng-template>
+
+          <ng-template let-brand pTemplate="listItem">
+            <div *ngFor="let marque of brand">
+              <div class="field-checkbox">
+                <p-checkbox name="group1" [(ngModel)]="valCheckMarque" [value]="marque.name" [id]="marque.name" (onChange)="updateFilters('brand')"></p-checkbox>
+                <label [for]="marque.name" style="width: 140%;">{{marque.name}}</label>
+                <span style="width: 60%; text-align: end">{{marque.count}}</span>
+              </div>
+            </div>
+          </ng-template>
+        </p-dataView>
+
+        <!-- See More/Less Button -->
+        <div class="flex justify-content-center mt-2">
+          <button pButton type="button" label="{{ showAllBrands ? 'See Less' : 'See More' }}" (click)="toggleShowAllBrands()"></button>
         </div>
-      </div>
+      </p-panel>
     </div>
-    <div class="card">
-      <h5>Shop</h5>
-      <div *ngFor="let shop of filters.shop">
-        <div class="field-checkbox">
-          <p-checkbox name="group1" [(ngModel)]="valCheckShop" value="{{shop}}" id="{{shop}}" (onChange)="updateFilters()"></p-checkbox>
-          <label for="{{shop}}">{{shop}}</label>
+
+
+    <!-- Shop Filter -->
+    <div style="margin-bottom: 30px">
+      <p-panel header="Shop" [toggleable]="true" class="line-height-3 m-0">
+        <p-dataView #dvShop [value]="displayedShops" filterBy="name">
+          <ng-template pTemplate="header">
+            <div class="grid grid-nogutter flex-column md:flex-row justify-content-between">
+          <span class="p-input-icon-left mb-2 md:mb-0">
+            <i class="pi pi-search"></i>
+            <input type="search" pInputText placeholder="Search by Shop" (input)="onFilter(dvShop, $event, 'shop')">
+          </span>
+            </div>
+          </ng-template>
+
+          <ng-template let-shop pTemplate="listItem">
+            <div *ngFor="let shop of shop">
+              <div class="field-checkbox">
+                <p-checkbox name="group1" [(ngModel)]="valCheckShop" [value]="shop.name" [id]="shop.name" (onChange)="updateFilters('shop')"></p-checkbox>
+                <label [for]="shop.name" style="width: 140%;">{{shop.name}}</label>
+                <span style="width: 60%; text-align: end">{{shop.count}}</span>
+              </div>
+            </div>
+          </ng-template>
+        </p-dataView>
+
+        <!-- See More/Less Button -->
+        <div class="flex justify-content-center mt-2">
+          <button pButton type="button" label="{{ showAllShops ? 'See Less' : 'See More' }}" (click)="toggleShowAllShops()"></button>
         </div>
-      </div>
+      </p-panel>
     </div>
-    <div class="card">
-      <h5>Color</h5>
-      <div *ngFor="let color of filters.couleur">
-        <div class="field-checkbox">
-          <p-checkbox name="group1" [(ngModel)]="valCheckColor" value="{{color}}" id="{{color}}" (onChange)="updateFilters()"></p-checkbox>
-          <label for="{{color}}">{{color}}</label>
+
+    <!-- Color Filter -->
+    <div style="margin-bottom: 30px">
+      <p-panel header="Color" [toggleable]="true" class="line-height-3 m-0">
+        <!-- DataView Component -->
+        <p-dataView #dvcl [value]="displayedColors" filterBy="name">
+          <ng-template pTemplate="header">
+            <div class="grid grid-nogutter flex-column md:flex-row justify-content-between">
+            <span class="p-input-icon-left mb-2 md:mb-0">
+              <i class="pi pi-search"></i>
+              <input type="search" pInputText placeholder="Search by Color" (input)="onFilter(dvcl, $event, 'color')">
+            </span>
+            </div>
+          </ng-template>
+
+          <ng-template let-cl pTemplate="listItem">
+            <div *ngFor="let color of cl">
+              <div class="field-checkbox">
+                <p-checkbox name="group1" [(ngModel)]="valCheckColor" [value]="color.name" [id]="color.name" (onChange)="updateFilters('color')"></p-checkbox>
+                <label [for]="color.name" style="width: 140%;">{{color.name}}</label>
+                <span style="width: 60%; text-align: end">{{color.count}}</span>
+              </div>
+            </div>
+          </ng-template>
+        </p-dataView>
+
+        <!-- See More/Less Button -->
+        <div class="flex justify-content-center mt-2">
+          <button pButton type="button" label="{{ showAllColors ? 'See Less' : 'See More' }}" (click)="toggleShowAllColors()"></button>
         </div>
-      </div>
+      </p-panel>
     </div>
   </div>
 
+
   <div class="col-12 xl:col-9">
     <div class="card">
-      <p-dataView #dv [value]="filteredData" [paginator]="true" [rows]="9" [totalRecords]="totalRecords" filterBy="modele" [sortField]="sortField" [sortOrder]="sortOrder" (onPage)="onPage($event)" layout="grid">
-        <ng-template pTemplate="header" >
-          <div class="grid grid-nogutter flex-column md:flex-row justify-content-between">
-            <p-dropdown [options]="sortOptions" placeholder="Sort By Price" (onChange)="onSortChange($event)"></p-dropdown>
-            <span class="p-input-icon-left mb-2 md:mb-0">
-              <i class="pi pi-search"></i>
-              <input type="search" pInputText placeholder="Search by Modele" (input)="onFilter(dv, $event)">
-            </span>
-            <p-dataViewLayoutOptions></p-dataViewLayoutOptions>
-          </div>
-        </ng-template>
+      <div *ngIf="filteredData && filteredData.length > 0; else loadingTemplate">
+        <p-dataView #dv [value]="filteredData" [paginator]="true" [rows]="9" [totalRecords]="totalRecords" filterBy="modele" [sortField]="sortField" [sortOrder]="sortOrder" (onPage)="onPage($event)" layout="grid">
+          <ng-template pTemplate="header">
+            <div class="grid grid-nogutter flex-column md:flex-row justify-content-between">
+              <p-dropdown [options]="sortOptions" placeholder="Sort By Price" (onChange)="onSortChange($event)"></p-dropdown>
+              <span class="p-input-icon-left mb-2 md:mb-0">
+          <i class="pi pi-search"></i>
+          <input type="search" pInputText placeholder="Search by Modele" (input)="onFilterdv(dv, $event)">
+        </span>
+              <p-dataViewLayoutOptions></p-dataViewLayoutOptions>
+            </div>
+          </ng-template>
 
-        <ng-template let-ph pTemplate="listItem" >
-          <div class="col-12" *ngFor="let phone of ph" style="border-bottom: 1px solid #ccc;">
-            <div class="flex flex-column md:flex-row align-items-center p-3 w-full">
-              <div class="flex-1 text-center md:text-left" (click)="selectPhone(phone)" style="cursor: pointer">
-                <div class="flex flex-column md:flex-row align-items-center p-3 w-full">
-                  <img [src]="phone.ad_image" [alt]="phone.titre_article" class="my-4 md:my-0 w-9 md:w-10rem shadow-2 mr-5" />
-                  <div class="flex-1 text-center md:text-left">
-                    <div class="text-2xl font-bold">{{phone.titre_article | uppercase}}</div>
-                    <div class="mb-3" *ngIf="phone.description_article">Description: {{phone.description_article}}</div>
-                    <div class="flex align-items-center mt-2">
-                      <i class="pi pi-tag mr-2"></i>
-                      <span class="font-semibold">{{phone.marque}}</span>
+          <ng-template let-ph pTemplate="listItem">
+            <div class="col-12" *ngFor="let phone of ph" style="border-bottom: 1px solid #ccc;">
+              <div class="flex flex-column md:flex-row align-items-center p-3 w-full">
+                <div class="flex-1 text-center md:text-left" (click)="selectPhone(phone)" style="cursor: pointer">
+                  <div class="flex flex-column md:flex-row align-items-center p-3 w-full">
+                    <img [src]="phone.ad_image" [alt]="phone.titre_article" class="my-4 md:my-0 w-9 md:w-10rem shadow-2 mr-5" />
+                    <div class="flex-1 text-center md:text-left">
+                      <div class="text-2xl font-bold">{{phone.titre_article | uppercase}}</div>
+                      <div class="mb-3" *ngIf="phone.description_article">Description: {{phone.description_article}}</div>
+                      <div class="flex align-items-center mt-2">
+                        <i class="pi pi-tag mr-2"></i>
+                        <span class="font-semibold">{{phone.marque}}</span>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-              <div class="flex flex-row md:flex-column justify-content-between w-full md:w-auto align-items-center md:align-items-end mt-5 md:mt-0">
-                <span class="text-2xl font-semibold mb-2 align-self-center md:align-self-end">{{(phone.max_price == phone.min_price ? phone.max_price : phone.min_price +' --> '+ phone.max_price) }} DT</span>
-                <p-button icon="pi pi-shopping-cart" label="Add to Cart" class="mb-2"></p-button>
-                <span [class]="'customer-badge status-' + getStatusClass(phone.stocks[0])">{{phone.stocks[0]}}</span>
-              </div>
-            </div>
-          </div>
-        </ng-template>
-
-        <ng-template let-ph pTemplate="gridItem">
-          <div class="grid">
-          <div class="col-12 md:col-4" *ngFor="let phone of ph" >
-            <div class="card m-3 border-1 surface-border">
-              <div (click)="selectPhone(phone)" style="cursor: pointer">
-                <div class="flex align-items-center justify-content-between">
-                  <div class="flex align-items-center">
-                      <i class="pi pi-tag mr-2"></i>
-                      <span class="font-semibold">{{phone.marque}}</span>
-                    </div>
+                <div class="flex flex-row md:flex-column justify-content-between w-full md:w-auto align-items-center md:align-items-end mt-5 md:mt-0">
+                  <span class="text-2xl font-semibold mb-2 align-self-center md:align-self-end">{{(phone.max_price == phone.min_price ? phone.max_price : phone.min_price +' --> '+ phone.max_price) }} DT</span>
+                  <p-button icon="pi pi-shopping-cart" label="Add to Cart" class="mb-2"></p-button>
                   <span [class]="'customer-badge status-' + getStatusClass(phone.stocks[0])">{{phone.stocks[0]}}</span>
                 </div>
-                <div class="text-center">
-                  <img [src]="phone.ad_image" [alt]="phone.titre_article" class="w-9 shadow-2 my-3 mx-0" />
-                  <div class="text-2xl font-bold">{{phone.titre_article | uppercase}}</div>
-                </div>
-              </div>
-              <div class="flex align-items-center justify-content-between">
-                <span class="text-2xl font-semibold">{{(phone.max_price == phone.min_price ? phone.max_price : phone.min_price +' --> '+ phone.max_price) }} DT</span>
-                <p-button icon="pi pi-shopping-cart"></p-button>
               </div>
             </div>
-          </div>
-          </div>
-        </ng-template>
-      </p-dataView>
+          </ng-template>
+
+          <ng-template let-ph pTemplate="gridItem">
+            <div class="grid">
+              <div class="col-12 md:col-4" *ngFor="let phone of ph">
+                <div class="card m-3 border-1 surface-border">
+                  <div (click)="selectPhone(phone)" style="cursor: pointer">
+                    <div class="flex align-items-center justify-content-between">
+                      <div class="flex align-items-center">
+                        <i class="pi pi-tag mr-2"></i>
+                        <span class="font-semibold">{{phone.marque}}</span>
+                      </div>
+                      <span [class]="'customer-badge status-' + getStatusClass(phone.stocks[0])">{{phone.stocks[0]}}</span>
+                    </div>
+                    <div class="text-center">
+                      <img [src]="phone.ad_image" [alt]="phone.titre_article" class="w-9 shadow-2 my-3 mx-0" />
+                      <div class="text-2xl font-bold">{{phone.titre_article | uppercase}}</div>
+                    </div>
+                  </div>
+                  <div class="flex align-items-center justify-content-between">
+                    <span class="text-2xl font-semibold">{{(phone.max_price == phone.min_price ? phone.max_price : phone.min_price +' --> '+ phone.max_price) }} DT</span>
+                    <p-button icon="pi pi-shopping-cart"></p-button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-template>
+        </p-dataView>
+      </div>
+
+      <!-- Loading template to show the spinner -->
+      <ng-template #loadingTemplate>
+        <div class="card flex justify-content-center">
+          <p-progressSpinner styleClass="w-4rem h-4rem" strokeWidth="8" fill="var(--surface-ground)" animationDuration=".5s"></p-progressSpinner>
+        </div>
+      </ng-template>
+
     </div>
   </div>
 </div>

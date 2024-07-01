@@ -6,8 +6,7 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test",
-    "deploy": "ng deploy --base-href=/FrontEnd_Recommandation/ --repo=https://github.com/HeythemAmara/FrontEnd_Recommandation.git --nojekyll"
+    "test": "ng test"
   },
   "private": true,
   "dependencies": {
@@ -37,7 +36,6 @@
     "@types/jasmine": "~5.1.0",
     "@types/jasminewd2": "^2.0.13",
     "@types/node": "^20.14.2",
-    "angular-cli-ghpages": "^2.0.1",
     "jasmine-core": "~5.1.0",
     "karma": "~6.4.0",
     "karma-chrome-launcher": "~3.2.0",

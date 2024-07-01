@@ -10,11 +10,11 @@ import {Phone} from "../../../api/phone.model";
 })
 export class FilterbarComponent implements OnInit {
   filters: Filters = {
-    max_ad_price: 100,
-    min_ad_price: 0,
+    max_price: 100,
+    min_price: 0,
     ram: [],
     stockage: [],
-    ad_stocks: [],
+    stocks: [],
     couleur: [],
     shop: [],
     marque: [],
@@ -26,7 +26,7 @@ export class FilterbarComponent implements OnInit {
   valCheckShop: string[] = [];
   valCheckMarque: string[] = [];
   valCheckColor: string[] = [];
-  sliderValues: [number, number] = [this.filters.min_ad_price, this.filters.max_ad_price];
+  sliderValues: [number, number] = [this.filters.min_price, this.filters.max_price];
   filteredData: any[] = [];
 
   constructor(private filterService: FilterService, private listcomponent: ListDemoComponent) {}
@@ -34,7 +34,7 @@ export class FilterbarComponent implements OnInit {
   refresh() {
     this.filterService.getFilters().subscribe((filters) => {
       this.filters = filters;
-      this.sliderValues = [this.filters.min_ad_price, this.filters.max_ad_price];
+      this.sliderValues = [this.filters.min_price, this.filters.max_price];
     });
   }
 
