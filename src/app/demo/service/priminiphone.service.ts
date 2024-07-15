@@ -9,6 +9,7 @@ export class PriminiPhoneService {
 
   constructor(private http: HttpClient) { }
 
+
   getPhones(start: number): Observable<PriminiPhone[]> {
     const body = { start }; // Create the request body
     return this.http.post<PriminiPhone[]>(environment.apiUrl+'/read-primini', body); // Send a POST request with the body

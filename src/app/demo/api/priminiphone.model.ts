@@ -1,4 +1,3 @@
-
 export interface PriminiPhone {
   ad_href: string;
   ad_image: string;

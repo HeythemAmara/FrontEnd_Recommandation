@@ -1,14 +1,12 @@
 import { Component } from '@angular/core';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
 import { UserService } from 'src/app/demo/service/user.service';
-import { HttpClient } from "@angular/common/http";
 import { NgForm } from "@angular/forms";
-import { Router } from '@angular/router';
-import {AuthService} from "../../../service/auth.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-login',
-  templateUrl: './login.component.html',
+  templateUrl: './register.component.html',
   styles: [`
     :host ::ng-deep .p-password input {
       width: 100%;
@@ -28,34 +26,28 @@ import {AuthService} from "../../../service/auth.service";
     }
   `]
 })
-export class LoginComponent {
+export class RegisterComponent {
   valCheck: string[] = ['remember'];
+  username: string = '';
   email: string = '';
   password: string = '';
-  rememberMe: boolean = false; // Add a property for the "Remember Me" checkbox
   errorMessage: string = '';
 
-
-  constructor(private userService: UserService, public layoutService: LayoutService, private router: Router, private authService: AuthService) { }
+  constructor(private userService: UserService, public layoutService: LayoutService, private router: Router) { }
 
   onSubmit(form: NgForm) {
     if (form.valid) {
-      this.userService.login(this.email, this.password).subscribe(
+      this.userService.register(this.username ,this.email, this.password).subscribe(
         response => {
-          console.log('Login successful');
+          console.log('Register successful');
           this.errorMessage = '';
-          if (this.rememberMe) {
-            localStorage.setItem('access_token', response.access_token);
-          } else {
-            sessionStorage.setItem('access_token', response.access_token);
-          }
-          this.authService.fastload();
-          this.router.navigateByUrl('Orange/phones');
-          this.errorMessage = 'Your account has yet to be verified by the admins'
+          localStorage.setItem('access_token', response.access_token);
+          this.router.navigateByUrl('phones');
         },
         error => {
+          //console.error('Login error:', error);
           if (error.status === 401) {
-            this.errorMessage = 'Invalid email or password';
+            this.errorMessage = 'Invalid username or email or password';
           } else {
             this.errorMessage = 'An error occurred. Please try again later.';
           }

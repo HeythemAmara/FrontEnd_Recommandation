@@ -17,6 +17,13 @@ import { AppFooterComponent } from './app.footer.component';
 import { AppConfigModule } from './config/config.module';
 import { AppSidebarComponent } from "./app.sidebar.component";
 import { AppLayoutComponent } from "./app.layout.component";
+import {SpeedDialModule} from "primeng/speeddial";
+import {ToastModule} from "primeng/toast";
+import {MenubarModule} from "primeng/menubar";
+import {DialogModule} from "primeng/dialog";
+import {DividerModule} from "primeng/divider";
+import {PasswordModule} from "primeng/password";
+import {MessagesModule} from "primeng/messages";
 
 @NgModule({
     declarations: [
@@ -27,20 +34,27 @@ import { AppLayoutComponent } from "./app.layout.component";
         AppSidebarComponent,
         AppLayoutComponent,
     ],
-    imports: [
-        BrowserModule,
-        FormsModule,
-        HttpClientModule,
-        BrowserAnimationsModule,
-        InputTextModule,
-        SidebarModule,
-        BadgeModule,
-        RadioButtonModule,
-        InputSwitchModule,
-        RippleModule,
-        RouterModule,
-        AppConfigModule
-    ],
+  imports: [
+    BrowserModule,
+    FormsModule,
+    HttpClientModule,
+    BrowserAnimationsModule,
+    InputTextModule,
+    SidebarModule,
+    BadgeModule,
+    RadioButtonModule,
+    InputSwitchModule,
+    RippleModule,
+    RouterModule,
+    AppConfigModule,
+    SpeedDialModule,
+    ToastModule,
+    MenubarModule,
+    DialogModule,
+    DividerModule,
+    PasswordModule,
+    MessagesModule
+  ],
     exports: [AppLayoutComponent]
 })
 export class AppLayoutModule { }

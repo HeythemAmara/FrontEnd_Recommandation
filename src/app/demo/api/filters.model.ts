@@ -10,18 +10,18 @@ export interface Filters {
 }
 
 export interface Couleur {
-  name: string[];
+  name: string;
   count: number;
 }
 export interface Stocks {
-  name: string[];
+  name: string;
   count: number;
 }
 export interface Shop {
-  name: string[];
+  name: string;
   count: number;
 }
 export interface Marque {
-  name: string[];
+  name: string;
   count: number;
 }
