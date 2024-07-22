@@ -22,7 +22,8 @@ export class AppMenuComponent implements OnInit {
         {
           label: 'Orange',
           items: [
-            { label: 'Primini', icon: 'pi pi-fw pi-clone', routerLink: ['/Orange/phones'] }
+            { label: 'Phones', icon: 'pi pi-fw pi-clone', routerLink: ['/Orange/phones'] },
+            { label: 'Orders', icon: 'pi pi-fw pi-cart-arrow-down', routerLink: ['/Orange/carts'] }
           ]
         },
       ];
@@ -31,7 +32,8 @@ export class AppMenuComponent implements OnInit {
           label: 'Orange',
           items: [
             { label: 'Users', icon: 'pi pi-fw pi-users', routerLink: ['/Orange/users'] },
-            { label: 'Primini', icon: 'pi pi-fw pi-clone', routerLink: ['/Orange/phones'] }
+            { label: 'Phones', icon: 'pi pi-fw pi-clone', routerLink: ['/Orange/phones'] },
+            { label: 'Orders', icon: 'pi pi-fw pi-cart-arrow-down', routerLink: ['/Orange/carts'] }
           ]
         },
       ];

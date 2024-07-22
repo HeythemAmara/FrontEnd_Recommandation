@@ -1,4 +1,5 @@
 <div class="grid">
+  <p-toast></p-toast>
   <p-dialog header="Phone Details" [(visible)]="display" [modal]="true" showEffect="fade" [style]="{width: '60%'}" [breakpoints]="{'960px': '75vw'}">
     <div class="col-12">
       <div class="flex flex-column md:flex-row align-items-center p-3 w-full">
@@ -232,7 +233,7 @@
     </div>
 
     <div style="height: 10%; display: grid; place-items: center;">
-      <p-button icon="pi pi-check-square" label="Confirm" class="mb-2" (click)="removeCartFromCache()"></p-button>
+      <p-button icon="pi pi-check-square" label="Confirm" class="mb-2" (click)="ConfirmCart()"></p-button>
     </div>
   </p-sidebar>
 

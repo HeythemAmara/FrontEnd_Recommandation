@@ -27,6 +27,7 @@ import {MenuModule} from "primeng/menu";
 import {ChipModule} from "primeng/chip";
 import {TagModule} from "primeng/tag";
 import {SpeedDialModule} from "primeng/speeddial";
+import {ToastModule} from "primeng/toast";
 
 @NgModule({
   imports: [
@@ -56,7 +57,8 @@ import {SpeedDialModule} from "primeng/speeddial";
     MenuModule,
     ChipModule,
     TagModule,
-    SpeedDialModule
+    SpeedDialModule,
+    ToastModule
   ],
     declarations: [
       PhonesComponent

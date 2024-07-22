@@ -1,12 +1,15 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {SelectItem} from 'primeng/api';
+import {MessageService, SelectItem} from 'primeng/api';
 import {DataView} from 'primeng/dataview';
 import {PriminiPhone} from 'src/app/demo/api/priminiphone.model';
-import {ItemCart} from 'src/app/demo/api/cart.model';
+import {Cart, ItemCart} from 'src/app/demo/api/cart.model';
 import {PriminiPhoneService} from 'src/app/demo/service/priminiphone.service'
 import {Filters} from "src/app/demo/api/filters.model";
 import {FilterService} from "src/app/demo/service/filters.service";
 import {CacheService} from "src/app/demo/service/cache.service";
+import {UserService} from "../../service/user.service";
+import {AuthService} from "../../service/auth.service";
+import {CartService} from "../../service/cart.service";
 
 @Component({
     templateUrl: './phones.component.html'
@@ -88,11 +91,21 @@ export class PhonesComponent implements OnInit {
   visibleSidebar2: boolean = false;
   quantity:number=0;
   filterHistory: string[]=[];
+
   itemCart : ItemCart[] = [];
+  cart : any = {
+    employee: '',
+    phones: this.itemCart,
+    total: 0,
+    status: 'Pending'
+  };
+  ConnecteduserName : string | null = '';
 
 
-    constructor(private priminiPhoneService: PriminiPhoneService, private filterService: FilterService, private cacheService: CacheService) {}
+    constructor(private messageService: MessageService, private authService: AuthService,private priminiPhoneService: PriminiPhoneService, private filterService: FilterService, private cacheService: CacheService, private cartService: CartService) {}
     refresh() {
+      this.authService.fastload();
+      this.ConnecteduserName = this.authService.username;
         this.priminiPhoneService.getPhones(0).subscribe((phones: PriminiPhone[]) => {
             this.phones = phones;
             this.filteredData = phones;
@@ -325,9 +338,39 @@ export class PhonesComponent implements OnInit {
     this.cacheService.saveFilters(this.filterHistory);
   }
 
+  CalculTotalPrice(){
+    let total=0;
+    for (let item of this.itemCart)
+    {
+      total+= item.quantity * item.phone.min_price
+    }
+    return total
+  }
+
+  ConfirmCart()
+  {
+    this.cart = {
+    employee: this.ConnecteduserName,
+    phones: this.itemCart,
+    total: this.CalculTotalPrice(),
+    status: 'Pending'
+  };
+    this.cartService.createCart(this.cart).subscribe(
+      response => {
+        this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Carts deleted successfully.' });
+        this.removeCartFromCache();
+      },
+      error => {
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'An error occurred while deleting the carts.' });
+      }
+    );
+
+  }
+
   removeCartFromCache()
   {
     console.log(this.itemCart);
+    this.itemCart=[];
     this.cacheService.deleteCart();
   }
 

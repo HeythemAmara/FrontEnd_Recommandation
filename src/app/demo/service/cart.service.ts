@@ -2,13 +2,14 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import {Cart} from "src/app/demo/api/cart.model";
 
 @Injectable({
   providedIn: 'root'
 })
 export class CartService {
 
-  private baseUrl: string = `${environment.apiUrl}/carts`;
+  private baseUrl: string = `${environment.apiUrlMongo}/carts`;
 
   constructor(private http: HttpClient) { }
 
@@ -17,9 +18,9 @@ export class CartService {
     return new HttpHeaders().set('Authorization', `Bearer ${token}`);
   }
 
-  createCart(createCartDto: any): Observable<any> {
+  createCart(cart: Cart): Observable<any> {
     const headers = this.getHeaders();
-    return this.http.post<any>(`${this.baseUrl}/create`, createCartDto, { headers });
+    return this.http.post<any>(`${this.baseUrl}/create`, cart, { headers });
   }
 
   getAllCarts(): Observable<any[]> {
@@ -33,15 +34,13 @@ export class CartService {
     return this.http.post<any[]>(`${this.baseUrl}/get-by-employee`, body, { headers });
   }
 
-  getCartByReference(reference: string): Observable<any> {
+  changeCartStatus(reference: string, status: string): Observable<any> {
     const headers = this.getHeaders();
-    const body = { reference };
-    return this.http.post<any>(`${this.baseUrl}/get-by-reference`, body, { headers });
-  }
-
-  changeCartStatus(changeStatusDto: any): Observable<any> {
-    const headers = this.getHeaders();
-    return this.http.put<any>(`${this.baseUrl}/change-status`, changeStatusDto, { headers });
+    let bodycart = {
+      "reference": reference,
+      "status": status
+    };
+    return this.http.put<any>(`${this.baseUrl}/change-status`, bodycart, { headers });
   }
 
   removeCart(reference: string): Observable<any> {
@@ -50,8 +49,10 @@ export class CartService {
     return this.http.request<any>('delete', `${this.baseUrl}/remove-cart`, { headers, body });
   }
 
-  deleteMultipleCarts(deleteCartsDto: any): Observable<any> {
+  deleteMultipleCarts(reference: string[]): Observable<any> {
+    console.log(reference);
+    let bodyref={"reference": reference}
     const headers = this.getHeaders();
-    return this.http.request<any>('delete', `${this.baseUrl}/remove-carts`, { headers, body: deleteCartsDto });
+    return this.http.request<any>('delete', `${this.baseUrl}/remove-carts`, { headers, body: bodyref});
   }
 }

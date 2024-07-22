@@ -26,16 +26,21 @@ import { FormsModule } from '@angular/forms';
 import {AuthGuard} from "./demo/service/auth.guard";
 import {AuthService} from "./demo/service/auth.service";
 import {DashboardusersComponent} from "./demo/components/dashboardusers/dashboardusers.component";
+import {DashboardcartsComponent} from "./demo/components/dashboardCarts/dashboardcarts.component";
 import {DialogModule} from "primeng/dialog";
 import {FileUploadModule} from "primeng/fileupload";
 import {InputNumberModule} from "primeng/inputnumber";
 import {InputTextareaModule} from "primeng/inputtextarea";
 import {RadioButtonModule} from "primeng/radiobutton";
 import {ToolbarModule} from "primeng/toolbar";
+import {CartService} from "./demo/service/cart.service";
+import {TagModule} from "primeng/tag";
+import {OverlayPanelModule} from "primeng/overlaypanel";
+import {MessageService} from "primeng/api";
 
 @NgModule({
     declarations: [
-        AppComponent, NotfoundComponent , DashboardusersComponent
+        AppComponent, NotfoundComponent , DashboardusersComponent , DashboardcartsComponent
     ],
   imports: [
     AppRoutingModule,
@@ -58,12 +63,14 @@ import {ToolbarModule} from "primeng/toolbar";
     InputNumberModule,
     InputTextareaModule,
     RadioButtonModule,
-    ToolbarModule
+    ToolbarModule,
+    TagModule,
+    OverlayPanelModule
   ],
     providers: [
         { provide: LocationStrategy, useClass: HashLocationStrategy },
         FilterService, PhoneService, PriminiPhoneService,
-        CacheService, UserService, TokenInterceptor, AuthGuard, AuthService
+        CacheService, UserService, TokenInterceptor, AuthGuard, AuthService, CartService, MessageService
     ],
     bootstrap: [AppComponent]
 })

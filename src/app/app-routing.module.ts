@@ -4,6 +4,7 @@ import { NotfoundComponent } from './demo/components/notfound/notfound.component
 import { AppLayoutComponent } from "./layout/app.layout.component";
 import { AuthGuard } from './demo/service/auth.guard';
 import { DashboardusersComponent } from "./demo/components/dashboardusers/dashboardusers.component";
+import {DashboardcartsComponent} from "./demo/components/dashboardCarts/dashboardcarts.component";
 
 @NgModule({
   imports: [
@@ -14,6 +15,7 @@ import { DashboardusersComponent } from "./demo/components/dashboardusers/dashbo
 
           { path: 'phones', loadChildren: () => import('./demo/components/phones/phones.module').then(m => m.PhonesModule), canActivate: [AuthGuard], data: { expectedRoles: ['Admin', 'Employee'] } },
           { path: 'users', component: DashboardusersComponent, canActivate: [AuthGuard], data: { expectedRoles: ['Admin'] } },
+          { path: 'carts', component: DashboardcartsComponent, canActivate: [AuthGuard], data: { expectedRoles: ['Admin', 'Employee'] } },
         ],
       },
       { path: 'auth', loadChildren: () => import('./demo/components/auth/auth.module').then(m => m.AuthModule) },

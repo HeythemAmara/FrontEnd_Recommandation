@@ -1,0 +1,178 @@
+<div class="grid">
+  <div class="col-12">
+    <div class="card px-6 py-6">
+      <p-toast></p-toast>
+      <p-toolbar styleClass="mb-4">
+        <ng-template pTemplate="left">
+          <div class="my-2">
+            <button pButton pRipple label="Delete" icon="pi pi-trash" class="p-button-danger" (click)="deleteSelectedCarts()" [disabled]="!selectedCarts || !selectedCarts.length"></button>
+          </div>
+        </ng-template>
+
+        <ng-template pTemplate="right">
+          <button pButton pRipple label="Export" icon="pi pi-upload" class="p-button-help" (click)="dt.exportCSV()"></button>
+        </ng-template>
+      </p-toolbar>
+
+      <p-table #dt
+               [value]="carts" [columns]="cols" [globalFilterFields]="['reference','total','status','employee']" [rows]="20" [paginator]="true" [rowsPerPageOptions]="[10,20,30,40,50]" [showCurrentPageReport]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [(selection)]="selectedCarts" selectionMode="multiple" [rowHover]="true"
+               sortField="employee"
+               sortMode="single"
+               dataKey="reference"
+               rowGroupMode="subheader"
+               groupRowsBy="employee"
+               [tableStyle]="{'min-width': '70rem'}">
+        <ng-template pTemplate="caption">
+          <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+            <h5 class="m-0">Manage carts</h5>
+            <span class="block mt-2 md:mt-0 p-input-icon-left">
+              <i class="pi pi-search"></i>
+              <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Search..."  class="w-full sm:w-auto"/>
+            </span>
+          </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="width: 2%"></th>
+            <th pSortableColumn="reference" style="width: 18%">reference <p-sortIcon field="reference"></p-sortIcon></th>
+            <th style="width: 18%">phones</th>
+            <th pSortableColumn="total" style="width: 18%">total <p-sortIcon field="total"></p-sortIcon></th>
+            <th pSortableColumn="status" style="width: 18%">status <p-sortIcon field="status"></p-sortIcon></th>
+            <th style="width: 10%"></th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="groupheader" let-cart let-rowIndex="rowIndex" let-expanded="expanded">
+          <tr>
+            <td colspan="1">
+              <button
+                type="button"
+                pButton
+                pRipple
+                [pRowToggler]="cart"
+                class="p-button-text p-button-rounded p-button-plain mr-2"
+                [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'">
+              </button>
+            </td>
+            <td colspan="5">
+              <p class="font-bold ml-2">{{cart.employee}}</p>
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="groupfooter" let-cart>
+          <tr class="p-rowgroup-footer">
+            <td colspan="5" style="text-align: right">Total Carts</td>
+            <td>{{calculateCustomerTotal(cart.employee)}}</td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="rowexpansion" let-cart>
+          <tr>
+            <td style="width:2%;">
+              <p-tableCheckbox [value]="cart"></p-tableCheckbox>
+            </td>
+            <td style="width:18%; min-width:10rem;">
+              {{cart.reference}}
+            </td>
+            <td style="width:18%; min-width:10rem;">
+              <button type="button" pButton label="Show Phones" (click)="op2.toggle($event);" class="p-button-success"></button>
+              <p-overlayPanel #op2 [showCloseIcon]="true" [style]="{width: '450px'}">
+                <ng-template pTemplate>
+                  <p-table [value]="cart.phones" selectionMode="single" [(selection)]="selectedPhone" [paginator]="true" [rows]="5" (onRowSelect)="op2.hide()" responsiveLayout="scroll">
+                    <ng-template pTemplate="header">
+                      <tr>
+                        <th pSortableColumn="phone.titre_article">Title<p-sortIcon field="name"></p-sortIcon></th>
+                        <th>Image</th>
+                        <th pSortableColumn="phone.marque">Brand<p-sortIcon field="name"></p-sortIcon></th>
+                        <th pSortableColumn="quantity">Quantity <p-sortIcon field="price"></p-sortIcon></th>
+                      </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-rowData let-ph >
+                        <tr [pSelectableRow]="rowData" >
+                          <td style="min-width: 10rem;">{{ph.phone.titre_article}}</td>
+                          <td style="min-width: 5rem;"><img src="{{ph.phone.ad_image}}" [alt]="ph.phone.titre_article" width="50" class="shadow-2"/></td>
+                          <td style="min-width: 12rem;">{{ph.phone.marque}}</td>
+                          <td style="min-width: 12rem;">{{ph.quantity}}</td>
+                        </tr>
+                    </ng-template>
+                  </p-table>
+                </ng-template>
+              </p-overlayPanel>
+            </td>
+            <td style="width:18%; min-width:10rem;">
+              {{cart.total}}
+            </td>
+            <td style="width:18%; min-width: 10rem;">
+              <span [class]="'customer-badge status-' + getStatusClass(cart.status)">{{cart.status}}</span>
+            </td>
+            <td style="width:10%;">
+              <div class="flex">
+                <button *ngIf="ConnecteduserRole == 'Admin'" pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editCart(cart)"></button>
+                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deleteCart(cart)"></button>
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+
+      </div>
+
+
+
+
+
+    <p-dialog [(visible)]="cartDialog" [style]="{width: '450px'}" header="Cart Details" [modal]="true" class="p-fluid">
+      <ng-template pTemplate="content">
+        <div class="field">
+          <span>reference : </span>
+          <span>{{cart.reference}}</span>
+        </div>
+        <div class="field">
+          <span>employee : </span>
+          <span>{{cart.employee}}</span>
+        </div>
+        <div class="field">
+          <span>total : </span>
+          <span>{{cart.total}}</span>
+        </div>
+        <div class="field">
+          <label for="status">Status</label>
+          <p-dropdown id="status" [options]="status" optionLabel="label" [(ngModel)]="cart.status" placeholder="Select a status">
+            <ng-template pTemplate="selectedItem">
+              <span *ngIf="cart && cart.status" [class]="'customer-badge status-' + getStatusClass(cart.status)">{{cart.status}}</span>
+            </ng-template>
+            <ng-template let-status pTemplate="role">
+              <span [class]="'customer-badge status-' + getStatusClass(status)">{{status}}</span>
+            </ng-template>
+          </p-dropdown>
+        </div>
+        <div class="field" style="height : 100px"></div>
+      </ng-template>
+
+      <ng-template pTemplate="footer">
+        <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+        <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="saveCart()"></button>
+      </ng-template>
+    </p-dialog>
+
+    <p-dialog [(visible)]="deleteCartDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
+      <div class="flex align-items-center justify-content-center">
+        <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+        <span *ngIf="cart">Are you sure you want to delete <b>{{cart.reference}}</b>?</span>
+      </div>
+      <ng-template pTemplate="footer">
+        <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteCartDialog = false"></button>
+        <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes" (click)="confirmDelete()"></button>
+      </ng-template>
+    </p-dialog>
+
+    <p-dialog [(visible)]="deleteCartsDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
+      <div class="flex align-items-center justify-content-center">
+        <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+        <span>Are you sure you want to delete selected carts?</span>
+      </div>
+      <ng-template pTemplate="footer">
+        <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteCartsDialog = false"></button>
+        <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes" (click)="confirmDeleteSelected()"></button>
+      </ng-template>
+    </p-dialog>
+  </div>
+</div>
