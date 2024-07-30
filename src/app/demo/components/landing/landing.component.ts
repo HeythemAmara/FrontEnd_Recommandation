@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import { Router } from '@angular/router';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
+import {AuthService} from "../../service/auth.service";
 
 @Component({
     selector: 'app-landing',
@@ -58,6 +59,15 @@ import { LayoutService } from 'src/app/layout/service/app.layout.service';
         }
     `]
 })
-export class LandingComponent {
-    constructor(public layoutService: LayoutService, public router: Router) { }
+export class LandingComponent implements OnInit {
+
+  ConnecteduserName : string | null = '';
+    constructor(public layoutService: LayoutService, public router: Router, private authService: AuthService) { }
+
+  ngOnInit(): void {
+    this.authService.fastload();
+    this.ConnecteduserName = this.authService.username;
+  }
+
+
 }

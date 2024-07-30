@@ -37,6 +37,7 @@ import {CartService} from "./demo/service/cart.service";
 import {TagModule} from "primeng/tag";
 import {OverlayPanelModule} from "primeng/overlaypanel";
 import {MessageService} from "primeng/api";
+import {StepsModule} from "primeng/steps";
 
 @NgModule({
     declarations: [
@@ -65,7 +66,8 @@ import {MessageService} from "primeng/api";
     RadioButtonModule,
     ToolbarModule,
     TagModule,
-    OverlayPanelModule
+    OverlayPanelModule,
+    StepsModule
   ],
     providers: [
         { provide: LocationStrategy, useClass: HashLocationStrategy },

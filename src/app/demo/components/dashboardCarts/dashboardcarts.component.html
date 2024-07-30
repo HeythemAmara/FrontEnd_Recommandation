@@ -69,7 +69,7 @@
             <td style="width:2%;">
               <p-tableCheckbox [value]="cart"></p-tableCheckbox>
             </td>
-            <td style="width:18%; min-width:10rem;">
+            <td style="width:18%; min-width:10rem;" >
               {{cart.reference}}
             </td>
             <td style="width:18%; min-width:10rem;">
@@ -97,15 +97,16 @@
                 </ng-template>
               </p-overlayPanel>
             </td>
-            <td style="width:18%; min-width:10rem;">
+            <td style="width:18%; min-width:10rem;" >
               {{cart.total}}
             </td>
-            <td style="width:18%; min-width: 10rem;">
+            <td style="width:18%; min-width: 10rem;" >
               <span [class]="'customer-badge status-' + getStatusClass(cart.status)">{{cart.status}}</span>
             </td>
             <td style="width:10%;">
               <div class="flex">
                 <button *ngIf="ConnecteduserRole == 'Admin'" pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editCart(cart)"></button>
+                <button pButton pRipple icon="pi pi-wrench" class="p-button-rounded p-button-help mr-2" (click)="workflow(cart)"></button>
                 <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deleteCart(cart)"></button>
               </div>
             </td>
@@ -116,8 +117,14 @@
       </div>
 
 
-
-
+    <p-dialog [(visible)]="workflowDialog" [style]="{width: '450px'}" header="Work Flow" [modal]="true" class="p-fluid">
+      <ng-template pTemplate="content">
+        <p-steps [model]="statusWorkflow" [readonly]="true" [(activeIndex)]="activeIndex"></p-steps>
+        <p *ngIf="activeIndex == 0"> Waiting on Admin to Verify the Command</p>
+        <p *ngIf="activeIndex == 1"> Command Verifiyed and Ready to be shipped</p>
+        <p *ngIf="activeIndex == 2"> Command shipped</p>
+      </ng-template>
+    </p-dialog>
 
     <p-dialog [(visible)]="cartDialog" [style]="{width: '450px'}" header="Cart Details" [modal]="true" class="p-fluid">
       <ng-template pTemplate="content">

@@ -1,21 +1,23 @@
 import { Component, OnInit } from '@angular/core';
-import { MessageService } from 'primeng/api';
+import {MenuItem, MessageService} from 'primeng/api';
 import { Table } from 'primeng/table';
 
 import {User} from "../../api/user.model";
 import {AuthService} from "../../service/auth.service";
-import {Cart, ItemCart} from "../../api/cart.model";
+import {Cart} from "../../api/cart.model";
 import {CartService} from "../../service/cart.service";
 import {PriminiPhone} from "../../api/priminiphone.model";
 
 @Component({
   selector: 'app-dashboardcarts',
   templateUrl: './dashboardcarts.component.html',
-  providers: [MessageService]
+  providers: [MessageService],
 })
 export class DashboardcartsComponent implements OnInit {
 
   cartDialog: boolean = false;
+
+  workflowDialog: boolean = false;
 
   deleteCartDialog: boolean = false;
 
@@ -83,6 +85,10 @@ export class DashboardcartsComponent implements OnInit {
 
   status: any[] = [];
 
+  statusWorkflow: MenuItem[] | undefined;
+
+  activeIndex: number = 0;
+
   ConnecteduserName : string | null = '';
   ConnecteduserRole : string | null = '';
 
@@ -102,6 +108,18 @@ export class DashboardcartsComponent implements OnInit {
       { field: 'employee', header: 'Employee' },
     ];
     this.status = ['Shipped', 'Validated', 'Pending'];
+
+    this.statusWorkflow = [
+      {
+        label: 'Pending',
+      },
+      {
+        label: 'Validated',
+      },
+      {
+        label: 'Shipped',
+      }
+    ];
   }
   private loadCarts() {
     if(this.ConnecteduserRole == 'Admin')
@@ -144,6 +162,28 @@ export class DashboardcartsComponent implements OnInit {
   editCart(cart: Cart) {
     this.cart = { ...cart };
     this.cartDialog = true;
+  }
+  workflow(cart: Cart) {
+    this.cart = { ...cart };
+    this.workflowDialog = true;
+    this.setActiveStep();
+  }
+
+  setActiveStep() {
+    switch (this.cart.status) {
+      case 'Pending':
+        this.activeIndex = 0;
+        break;
+      case 'Validated':
+        this.activeIndex = 1;
+        break;
+      case 'Shipped':
+        this.activeIndex = 2;
+        break;
+      default:
+        this.activeIndex = 0;
+        break;
+    }
   }
 
 
@@ -207,6 +247,10 @@ export class DashboardcartsComponent implements OnInit {
   hideDialog() {
     this.cartDialog = false;
     this.submitted = false;
+  }
+
+  hideWorkflowDialog() {
+    this.workflowDialog = false;
   }
 
   saveCart() {
