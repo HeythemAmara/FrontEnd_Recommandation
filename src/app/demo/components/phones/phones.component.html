@@ -188,8 +188,11 @@
 
   <p-sidebar [(visible)]="visibleSidebar2" position="right" [style]="{width: '40%'}" [baseZIndex]="10000">
     <h1 style="height: 7%">Cart</h1>
+    <div style="height: 5%;">
+      <span>{{productsInfo}} Products  |</span><span>  {{itemsInfo}} Items  |</span><span>  Total price:  </span><span>{{priceInfo}} dt</span>
+    </div>
 
-    <div style="overflow: auto; height: 80%">
+    <div style="overflow: auto; height: 75%">
       <ng-container *ngIf="itemCart && itemCart.length > 0; else emptyCart">
         <p-dataView #dv [value]="itemCart">
           <ng-template pTemplate="list" let-it>
@@ -205,17 +208,24 @@
                         <span class="font-medium text-secondary text-sm">{{ item.phone.modele }}</span>
                         <div class="text-lg font-medium text-900 mt-2">{{ item.phone.titre_article }}</div>
                       </div>
-                      <div class="surface-100 p-1" style="border-radius: 30px">
-                        <div class="surface-0 flex align-items-center gap-2 justify-content-center py-1 px-2" style="border-radius: 30px; box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.04), 0px 1px 2px 0px rgba(0, 0, 0, 0.06)">
-                          <span class="text-900 font-medium text-sm">{{ item.quantity }}</span>
-                          <!--<i class="pi pi-star-fill text-yellow-500"></i>-->
-                        </div>
-                      </div>
+                        <p-inputNumber
+                          [(ngModel)]="item.quantity"
+                          [showButtons]="true"
+                          [min]="0"
+                          [max]="999"
+                          mode="decimal"
+                          buttonLayout="horizontal"
+                          inputId="vertical"
+                          incrementButtonIcon="pi pi-plus"
+                          decrementButtonIcon="pi pi-minus"
+                          [inputStyle]="{'width':'75px'}"
+                          (onInput)="onQuantityChangeItem(item)"/>
                     </div>
                     <div class="flex flex-column md:align-items-end gap-5">
                       <span class="text-xl font-semibold text-900">{{(item.phone.max_price == item.phone.min_price ? item.phone.max_price : 'From '+ item.phone.min_price +' To '+ item.phone.max_price) }} DT</span>
                       <div class="flex flex-row-reverse md:flex-row gap-2">
                         <p-button icon="pi pi-search" [outlined]="true" (click)="selectPhone(item.phone)" />
+                        <p-button icon="pi pi-trash" [outlined]="true" (click)="removeFromCart(item)" />
                       </div>
                     </div>
                   </div>
@@ -231,10 +241,10 @@
         </div>
       </ng-template>
     </div>
-
     <div style="height: 10%; display: grid; place-items: center;">
       <p-button icon="pi pi-check-square" label="Confirm" class="mb-2" (click)="ConfirmCart()"></p-button>
     </div>
+
   </p-sidebar>
 
   <p-overlayPanel #op1 [style]="{width: '325px'}">
@@ -273,7 +283,12 @@
                 <i class="pi pi-search"></i>
                 <input type="search" pInputText placeholder="Search by Title" (input)="onFilterdv(dv, $event)">
               </span>
-              <p-button icon="pi pi-shopping-cart" (click)="visibleSidebar2 = true" label="Open Cart" class="mb-2"></p-button>
+              <div *ngIf="itemCart.length>0">
+                <p-button icon="pi pi-shopping-cart" (click)="visibleSidebar2 = true" label="Open Cart ({{itemCart.length}})" class="mb-2"></p-button>
+              </div>
+              <div *ngIf="itemCart.length==0">
+                <p-button icon="pi pi-shopping-cart" (click)="visibleSidebar2 = true" label="Open Cart" class="mb-2"></p-button>
+              </div>
               <p-dataViewLayoutOptions></p-dataViewLayoutOptions>
             </div>
 

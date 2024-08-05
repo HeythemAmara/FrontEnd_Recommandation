@@ -90,7 +90,20 @@
                           <td style="min-width: 10rem;">{{ph.phone.titre_article}}</td>
                           <td style="min-width: 5rem;"><img src="{{ph.phone.ad_image}}" [alt]="ph.phone.titre_article" width="50" class="shadow-2"/></td>
                           <td style="min-width: 12rem;">{{ph.phone.marque}}</td>
-                          <td style="min-width: 12rem;">{{ph.quantity}}</td>
+                          <td style="min-width: 12rem;" *ngIf="cart.status != 'Pending'">{{ph.quantity}}</td>
+                          <td style="min-width: 12rem;" *ngIf="cart.status == 'Pending'">
+                            <p-inputNumber
+                              [(ngModel)]="ph.quantity"
+                              [showButtons]="true"
+                              [min]="0"
+                              [max]="999"
+                              mode="decimal"
+                              buttonLayout="horizontal"
+                              inputId="vertical"
+                              incrementButtonIcon="pi pi-plus"
+                              decrementButtonIcon="pi pi-minus"
+                              [inputStyle]="{'width':'75px'}"
+                              (onInput)="onQuantityChange(cart.reference,ph,$event)"/></td>
                         </tr>
                     </ng-template>
                   </p-table>

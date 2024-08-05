@@ -7,7 +7,6 @@ import {PriminiPhoneService} from 'src/app/demo/service/priminiphone.service'
 import {Filters} from "src/app/demo/api/filters.model";
 import {FilterService} from "src/app/demo/service/filters.service";
 import {CacheService} from "src/app/demo/service/cache.service";
-import {UserService} from "../../service/user.service";
 import {AuthService} from "../../service/auth.service";
 import {CartService} from "../../service/cart.service";
 
@@ -101,6 +100,10 @@ export class PhonesComponent implements OnInit {
   };
   ConnecteduserName : string | null = '';
 
+  productsInfo= 0;
+  itemsInfo  = 0;
+  priceInfo  = 0;
+
 
     constructor(private messageService: MessageService, private authService: AuthService,private priminiPhoneService: PriminiPhoneService, private filterService: FilterService, private cacheService: CacheService, private cartService: CartService) {}
     refresh() {
@@ -125,7 +128,7 @@ export class PhonesComponent implements OnInit {
         }
         this.sortfilters();
       });
-
+      this.updateCartInfo();
     }
     ngOnInit() {
         this.refresh();
@@ -248,13 +251,12 @@ export class PhonesComponent implements OnInit {
 
   updateSelectPhone(phone: PriminiPhone) {
     this.selectedPhone= phone;
-    const existingItem = this.itemCart.find(item => item.phone === phone);
+    const existingItem = this.itemCart.find(item => item.phone.titre_article === phone.titre_article);
     if (existingItem) {
       this.quantity = existingItem.quantity;
     } else {
       this.quantity = 0;
     }
-    console.log(this.selectedPhone);
   }
 
     selectPhone(phone: PriminiPhone) {
@@ -425,6 +427,28 @@ export class PhonesComponent implements OnInit {
     this.quantity = event.value;
     this.addToCart();
   }
+  onQuantityChangeItem(itemsl : ItemCart) {
+      const existingItemIndex = this.itemCart.findIndex(item => item.phone === itemsl.phone);
+      if (existingItemIndex !== -1) {
+        if(itemsl.quantity !== 0)
+        {
+          this.itemCart[existingItemIndex] = itemsl;
+        }
+        else {
+          this.itemCart.splice(existingItemIndex, 1);
+        }
+      }
+      this.cacheService.deleteCart();
+      this.cacheService.saveCart(this.itemCart);
+  }
+  removeFromCart(itemsl : ItemCart) {
+    const existingItemIndex = this.itemCart.findIndex(item => item.phone === itemsl.phone);
+    if (existingItemIndex !== -1) {
+      this.itemCart.splice(existingItemIndex, 1);
+    }
+    this.cacheService.deleteCart();
+    this.cacheService.saveCart(this.itemCart);
+  }
 
   incrementBy(amount: number) {
     if (this.quantity + amount <= 999) {
@@ -432,7 +456,6 @@ export class PhonesComponent implements OnInit {
     }
     this.addToCart();
   }
-
   decrementBy(amount: number) {
     if (this.quantity - amount >= 0) {
       this.quantity -= amount;
@@ -453,8 +476,14 @@ export class PhonesComponent implements OnInit {
     }
     this.cacheService.deleteCart();
     this.cacheService.saveCart(this.itemCart);
+    this.updateCartInfo();
   }
 
+  updateCartInfo(){
+    this.productsInfo = this.itemCart.length
+    this.itemsInfo = this.itemCart.reduce((quantity, item) => quantity + item.quantity, 0);
+    this.priceInfo = this.itemCart.reduce((price, item) => price + item.phone.min_price, 0);
+  }
 
 
   openExternalLink(url: string) {

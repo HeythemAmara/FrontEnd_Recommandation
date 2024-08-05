@@ -55,4 +55,16 @@ export class CartService {
     const headers = this.getHeaders();
     return this.http.request<any>('delete', `${this.baseUrl}/remove-carts`, { headers, body: bodyref});
   }
+
+  changePhoneQuantity(reference: string, title: string, quantity: number): Observable<any> {
+    const headers = this.getHeaders();
+    let bodycart = {
+      "reference": reference,
+      "items": [{
+        "titre_article": title,
+        "quantity": quantity
+      }]
+    };
+    return this.http.put<any>(`${this.baseUrl}/change-quantity`, bodycart, { headers });
+  }
 }

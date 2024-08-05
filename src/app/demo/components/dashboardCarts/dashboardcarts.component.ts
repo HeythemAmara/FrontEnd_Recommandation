@@ -4,7 +4,7 @@ import { Table } from 'primeng/table';
 
 import {User} from "../../api/user.model";
 import {AuthService} from "../../service/auth.service";
-import {Cart} from "../../api/cart.model";
+import {Cart, ItemCart} from "../../api/cart.model";
 import {CartService} from "../../service/cart.service";
 import {PriminiPhone} from "../../api/priminiphone.model";
 
@@ -206,7 +206,6 @@ export class DashboardcartsComponent implements OnInit {
 
   confirmDelete() {
     this.deleteCartDialog = false;
-    console.log(this.cart)
     this.cartService.removeCart(this.cart.reference).subscribe(
       response => {
         this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Cart deleted successfully.' });
@@ -255,8 +254,6 @@ export class DashboardcartsComponent implements OnInit {
 
   saveCart() {
     this.submitted = true;
-    console.log(this.cart.reference);
-    console.log(this.cart.status);
     this.cartService.changeCartStatus(this.cart.reference,this.cart.status).subscribe(
       response => {
         this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Cart\'s status changed successfully.' });
@@ -312,6 +309,20 @@ export class DashboardcartsComponent implements OnInit {
 
     return total;
   }
+
+  onQuantityChange(reference: string,item: ItemCart , event: any){
+    this.cartService.changePhoneQuantity(reference,item.phone.titre_article,event.value).subscribe(
+      response => {
+        this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Quantity updated successfully.' });
+        this.loadCarts(); // Reload users to reflect changes
+      },
+      error => {
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'An error occurred while updating the quantity.' });
+      }
+    );
+  }
+
+
 
   protected readonly console = console;
 }
